@@ -1,3 +1,5 @@
+const users = []
+
 const generateMessage = (username, text) => {
     if (!username) {
         return 'Username Not Provided'
@@ -8,11 +10,9 @@ const generateMessage = (username, text) => {
     return {
         username,
         text,
-        createdAt: new Date()
+        createdAt: new Date().getTime()
     }
 }
-
-const users = []
 
 const addUser = ({ id, username, room }) => {
     // Clean The Data

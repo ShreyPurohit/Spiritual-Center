@@ -3,9 +3,10 @@
 import ChatAreaComponent from "@/components/chat/ChatAreaComponent";
 import ChatSideBarComponent from "@/components/chat/ChatSideBarComponent";
 import { IUserChat } from "@/lib/helpers/interfaces";
-import { addMessageToDB, fetchCurrentRoomMessages, getChatUsersList, makeGroupInDB } from "@/lib/store/features/Chats/fetchChatsApi";
+import { addMessageToDB, getChatUsersList, joinRoomHandlerThunk } from "@/lib/store/features/Chats/fetchChatsApi";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { socket } from "../socket";
 
 export default function Home() {
@@ -26,7 +27,7 @@ export default function Home() {
     }, [messages])
 
     useEffect(() => {
-        dispatch(getChatUsersList())
+        fetchChatUserList()
         socket.on('message', (message) => {
             setMessages((prevMessages) => [...prevMessages, message])
         })
@@ -35,23 +36,32 @@ export default function Home() {
         }
     }, [socket]);
 
+    const fetchChatUserList = async () => {
+        const resultAction = await dispatch(getChatUsersList())
+        if (getChatUsersList.fulfilled.match(resultAction)) {
+            console.log("User List Fetched Successfully")
+        } else {
+            throw new Error("Failed Fetching Payments")
+        }
+    }
+
     const generateRoom = (senderID: string, recieverID: string) => {
-        return senderID.concat(recieverID).split('').sort().join('')
+        const compare = (a: string, b: string) => {
+            return a < b ? -1 : 1
+        }
+        const sortedID = [senderID, recieverID].sort(compare)
+        return sortedID.join('')
     }
 
     const joinRoomHandler = (name: string, username: string, photo: string) => {
         console.log('joined room with ' + name);
         const decodedUsername = loggedInUser?.split("-").slice(2).join("-") as string
         const room = generateRoom(decodedUsername, username)
-
+        console.log(room);
         socket.emit('join', { username: decodedUsername, room }, (error: any) => {
-            if (error) {
-                console.error(error)
-                return
-            }
+            if (error) { return toast.error(error) }
         })
-        dispatch(makeGroupInDB({ roomID: room }))
-        dispatch(fetchCurrentRoomMessages({ currentRoom: room }))
+        dispatch(joinRoomHandlerThunk(room))
         setHeaderData({ profilePic: photo, fullName: name })
         setMessages([])
         setShowChatArea(true)
@@ -59,14 +69,10 @@ export default function Home() {
 
     const handleBroadcast = () => {
         socket.emit('join', { username: loggedInUser?.split("-").slice(2).join("-"), room: "broadcastroom" }, (error: any) => {
-            if (error) {
-                console.error(error)
-                return
-            }
+            if (error) { return error }
         })
         setHeaderData({ profilePic: "", fullName: "Broadcast Group" })
-        dispatch(makeGroupInDB({ roomID: 'broadcastroom' }))
-        dispatch(fetchCurrentRoomMessages({ currentRoom: 'broadcastroom' }))
+        dispatch(joinRoomHandlerThunk('broadcast'))
         setMessages([])
         setShowChatArea(true)
     }
@@ -74,12 +80,11 @@ export default function Home() {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const decodedUsername = loggedInUser?.split("-").slice(2).join("-") as string
-        const messageData = { roomID: currentRoom!, text: inputValue, username: decodedUsername, createdAt: new Date().getTime() }
+        if (!currentRoom) { return }
+        const messageData = { roomID: currentRoom, text: inputValue, username: decodedUsername, createdAt: new Date().getTime() }
         dispatch(addMessageToDB(messageData))
         socket.emit('sendMessage', inputValue, (error: any) => {
-            if (error) {
-                console.error(error)
-            }
+            if (error) { return toast.error(error) }
             console.log("Message Delivered");
         })
         setInputValue('')

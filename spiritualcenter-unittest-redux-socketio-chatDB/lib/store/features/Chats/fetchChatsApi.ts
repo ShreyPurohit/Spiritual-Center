@@ -78,4 +78,16 @@ const fetchCurrentRoomMessages = createAsyncThunk(
     }
 )
 
-export { addMessageToDB, fetchCurrentRoomMessages, getChatUsersList, makeGroupInDB }
+const joinRoomHandlerThunk = createAsyncThunk(
+    'chats/joinRoomAndFetchMessages',
+    async (roomID: string, { rejectWithValue, dispatch }) => {
+        try {
+            await (dispatch(makeGroupInDB({ roomID })))
+            await (dispatch(fetchCurrentRoomMessages({ currentRoom: roomID })))
+        } catch (error: any) {
+            return rejectWithValue(error.message)
+        }
+    }
+)
+
+export { addMessageToDB, fetchCurrentRoomMessages, getChatUsersList, makeGroupInDB, joinRoomHandlerThunk }

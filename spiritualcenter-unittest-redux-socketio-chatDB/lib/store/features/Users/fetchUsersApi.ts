@@ -131,12 +131,29 @@ const fetchUnpaidUsersApi = createAsyncThunk(
     }
 )
 
-const logoutUser = (state: IUserState, action: PayloadAction) => {
-    state.loggedInUser = ""
-}
+const logoutUsersApi = createAsyncThunk(
+    'users/logout',
+    async (thunkApi, { rejectWithValue, getState }) => {
+        try {
+            const state = getState() as RootState
+            let { loggedInUser } = state.user
+            const response = await fetch('http://localhost:3000/api/users/logout', {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                loggedInUser = null
+            } else {
+                console.error('Failed to log out');
+            }
+        } catch (error: any) {
+            return rejectWithValue(error.message)
+        }
+    }
+)
 
 const setEditUser = (state: IUserState, action: PayloadAction<IUser>) => {
     state.editUser = action.payload
 }
 
-export { addUsers, alreadyLoggedIn, deleteUser, fetchAllUsers, fetchUnpaidUsersApi, loginUser, logoutUser, setEditUser, updateUser }
+export { addUsers, alreadyLoggedIn, deleteUser, fetchAllUsers, fetchUnpaidUsersApi, loginUser, setEditUser, updateUser, logoutUsersApi }

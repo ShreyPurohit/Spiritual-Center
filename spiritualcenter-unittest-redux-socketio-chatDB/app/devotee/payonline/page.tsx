@@ -3,7 +3,9 @@
 import { IPayment } from "@/lib/helpers/interfaces";
 import { makePayment } from "@/lib/store/features/Payments/fetchPaymentsApi";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 
 const years = ["", "2020", "2021", "2022", "2023", "2024"];
 const months = [
@@ -23,6 +25,7 @@ const months = [
 ];
 
 const DevoteePayOnlinePage = () => {
+  const router = useRouter()
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector((state) => state.payment);
 
@@ -33,13 +36,23 @@ const DevoteePayOnlinePage = () => {
     formState: { errors },
   } = useForm<IPayment>({ mode: "all" });
 
-  const onSubmit: SubmitHandler<IPayment> = (data) => {
+  const onSubmit: SubmitHandler<IPayment> = async (data) => {
     const formData = new FormData();
     formData.append("month", data.month);
     formData.append("year", data.year);
     formData.append("amount", String(data.amount));
-    dispatch(makePayment(formData));
-    reset();
+    try {
+      const resultAction = await dispatch(makePayment(formData))
+      if (makePayment.fulfilled.match(resultAction)) {
+        toast.success("Logged In User Successfully")
+        reset()
+        router.push(`/devotee/mypayments`)
+      } else {
+        throw new Error('Login Failed')
+      }
+    } catch (error: any) {
+      toast.error(error.message)
+    }
   };
 
   const validateAmount = (value: string) => {

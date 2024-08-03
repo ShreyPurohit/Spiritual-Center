@@ -1,11 +1,47 @@
 import { NextResponse } from 'next/server'
 import PaymentModel from "@/models/PaymentModel";
 import connectMongoDb from "@/lib/connectDatabase";
+import UserModel from '@/models/UserModel';
 
 export async function GET() {
   try {
     await connectMongoDb()
-    const allPayments = await PaymentModel.find().select('-__v')
+    const allPayments = await UserModel.aggregate([
+      {
+        $lookup:
+        {
+          from: "payments",
+          localField: "_id",
+          foreignField: "made_by",
+          as: "payments",
+        },
+      },
+      {
+        $match: {
+          $and: [
+            {
+              "payments.0": {
+                $exists: true,
+              },
+            },
+            {
+              role: {
+                $ne: "admin",
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project:
+        {
+          fullName: 1,
+          username: 1,
+          payments: 1
+        },
+      },
+    ])
+
     return NextResponse.json({
       message: "Payments Fetched Successfully",
       allPayments

@@ -5,6 +5,7 @@ import { myPaymentsApi } from "@/lib/store/features/Payments/fetchPaymentsApi";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 const Loader = dynamic(() => import("@/components/common/Loader"));
 
 const DevoteeMyPaymentsPage = () => {
@@ -13,13 +14,17 @@ const DevoteeMyPaymentsPage = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const id = setTimeout(() => {
-      dispatch(myPaymentsApi());
-    }, 1000);
-    return () => {
-      clearTimeout(id)
+    getMyPayments()
+  }, [loggedInUser]);
+
+  const getMyPayments = async () => {
+    const resultAction = await dispatch(myPaymentsApi());
+    if (myPaymentsApi.fulfilled.match(resultAction)) {
+      toast.success("Payments Fetched Successfully")
+    } else {
+      throw new Error("Failed Fetching Payments")
     }
-  }, []);
+  }
 
   return (
     <>

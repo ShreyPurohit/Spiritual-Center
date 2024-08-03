@@ -1,7 +1,6 @@
 "use client";
 
 import AdminUserFormPage from "@/components/admin/UserForm";
-import { IUserCreateInput } from "@/lib/helpers/interfaces";
 import { useAppSelector } from "@/lib/store/hooks";
 
 const AdminUpdateUserPage = () => {
@@ -9,9 +8,7 @@ const AdminUpdateUserPage = () => {
   if (!editUser) {
     return;
   }
-  const renderDate = new Date(editUser.initiationDate)
-    .toISOString()
-    .split("T")[0];
+  const renderDate = new Date(editUser.initiationDate).toISOString().split("T")[0];
 
   const inputProp: any = {
     firstName: editUser.fullName.firstName,

@@ -10,6 +10,7 @@ import { IUser } from "@/lib/helpers/interfaces";
 import { fetchAllUsers } from "@/lib/store/features/Users/fetchUsersApi";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const AdminUserListPage = () => {
   const dispatch = useAppDispatch();
@@ -23,11 +24,21 @@ const AdminUserListPage = () => {
   }, [user])
 
   useEffect(() => {
-    dispatch(fetchAllUsers({ page: currentPage, limit: 4 }));
+    fetchUsersCall()
   }, [dispatch, currentPage]);
 
-  const handlePageChange = (newPage: number) => {
-    dispatch(fetchAllUsers({ page: newPage, limit: 4 }));
+  const fetchUsersCall = async () => {
+    const resultAction = await dispatch(fetchAllUsers({ page: currentPage, limit: 4 }));
+    if (fetchAllUsers.fulfilled.match(resultAction)) {
+      toast.success("Users Fetched Successfully")
+    }
+  }
+
+  const handlePageChange = async (newPage: number) => {
+    const resultAction = dispatch(fetchAllUsers({ page: newPage, limit: 4 }));
+    if (fetchAllUsers.fulfilled.match(resultAction)) {
+      toast.success("Users Fetched Successfully")
+    }
     setAllUsers(user);
   };
 
@@ -43,7 +54,7 @@ const AdminUserListPage = () => {
       {loading ? <Loader text="Fetching Users" /> :
         <>
           <div className="overflow-x-auto text-center m-2 text-sm lg:text-base">
-            <table className="md:w-full table table-auto min-w-max">
+            <table id="devoteeList" className="md:w-full table table-auto min-w-max">
               <thead>
                 <tr>
                   <th>DevoteeId</th>
@@ -62,7 +73,7 @@ const AdminUserListPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {users.length > 0 && users.map((user) => (
                   <tr
                     key={user._id}
                     className="hover:bg-slate-200 hover:transition"

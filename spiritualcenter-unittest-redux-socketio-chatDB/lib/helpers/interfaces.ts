@@ -37,6 +37,13 @@ export interface IPayment extends Document {
     amount: number
 }
 
+export interface ICompletedPayments {
+    _id: string,
+    username: string,
+    fullName: { firstName: string, middleName: string, lastName: string },
+    payments: IPayment[]
+}
+
 export interface IUserCreateInput extends Document {
     firstName: string;
     middleName: string;

@@ -12,16 +12,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     const user = await UserModel.findOne({ username: data.username });
 
-    if (!user)
-      return NextResponse.json(
-        { message: "Invalid user/password/role" },
-        { status: 404 }
-      );
-    if (user.password !== data.password || user.role !== data.role)
-      return NextResponse.json(
-        { message: "Invalid user/password/role" },
-        { status: 401 }
-      );
+    if (!user) return NextResponse.json({ message: "Invalid user/password/role" }, { status: 404 });
+    if (user.password !== data.password || user.role !== data.role) return NextResponse.json({ message: "Invalid user/password/role" }, { status: 401 });
 
     const cookieValue = encrypt(
       JSON.stringify({
@@ -43,20 +35,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
       path: "/",
     });
 
-    const response = NextResponse.json(
-      {
-        message: "Logged In Successfully",
-        user,
-      },
-      { status: 200 }
-    );
-
+    const response = NextResponse.json({ message: "Logged In Successfully", user, }, { status: 200 });
     response.headers.set("Set-Cookie", cookie);
     return response;
   } catch (error) {
-    return NextResponse.json(
-      { message: "Error Logging In", error },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Error Logging In", error }, { status: 500 });
   }
 }

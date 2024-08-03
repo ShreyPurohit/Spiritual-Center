@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 const Loader = dynamic(() => import("@/components/common/Loader"));
@@ -16,15 +16,7 @@ const LoginPage = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [showOtp, setShowOtp] = useState(false);
-  const { loading, error, loggedInUser } = useAppSelector((state) => state.user);
-
-  useEffect(() => {
-    if (loggedInUser) {
-      router.push(`/${loggedInUser.split("-")[1]}`);
-    } else {
-      return;
-    }
-  }, [loggedInUser, router]);
+  const { loading, error } = useAppSelector((state) => state.user);
 
   const {
     register,
@@ -41,20 +33,24 @@ const LoginPage = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<ILoginInputs> = (data: ILoginInputs) => {
+  const onSubmit: SubmitHandler<ILoginInputs> = async (data: ILoginInputs) => {
     const formData = new FormData();
     formData.append("username", data.username);
     formData.append("password", data.password);
     formData.append("role", data.role);
     formData.append("otp", data.otp);
-    dispatch(loginUser(formData));
-    if (error && error !== 'Rejected') {
-      toast.error(error);
-    } else {
-      toast.success("Logged In Successfully");
-      reset();
+    try {
+      const resultAction = await dispatch(loginUser(formData))
+      if (loginUser.fulfilled.match(resultAction)) {
+        toast.success("Logged In User Successfully")
+        reset()
+        router.push(`/${data.role}`)
+      } else {
+        throw new Error('Login Failed')
+      }
+    } catch (error: any) {
+      toast.error(error.message)
     }
-    router.push(`/${data.role}`)
   };
 
   return (

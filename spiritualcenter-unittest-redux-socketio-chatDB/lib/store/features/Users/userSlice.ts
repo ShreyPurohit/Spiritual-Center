@@ -1,7 +1,7 @@
 import { IUser } from "@/lib/helpers/interfaces";
 import { createSlice } from "@reduxjs/toolkit";
 import extraUserReducers from "./extraReducers";
-import { logoutUser, setEditUser } from "./fetchUsersApi";
+import { setEditUser } from "./fetchUsersApi";
 
 export interface IUserState {
     loggedInUser: string | null,
@@ -31,11 +31,10 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        logoutReducer: logoutUser,
         editUser: setEditUser
     },
     extraReducers: extraUserReducers
 })
 
-export const { logoutReducer, editUser } = userSlice.actions
+export const { editUser } = userSlice.actions
 export default userSlice.reducer

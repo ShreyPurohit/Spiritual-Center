@@ -6,7 +6,6 @@ import { useAppSelector } from "@/lib/store/hooks"
 import { ArrowLeftCircle, SendHorizontalIcon } from "lucide-react"
 import moment from "moment"
 import RenderImage from "../common/RenderImage"
-import Loader from '../common/Loader'
 
 const ChatAreaComponent: React.FC<IChatAreaProps> = ({ headerData, messages, handleSubmit, inputValue, setInputValue, setShowChatArea }) => {
 
@@ -52,18 +51,14 @@ const ChatAreaComponent: React.FC<IChatAreaProps> = ({ headerData, messages, han
             </article>
             <article id="chat-area" className="flex flex-col flex-1 border overflow-scroll scrollers">
                 {error && (<h2 id="error" className="text-center text-2xl text-amber-700 tracking-wide uppercase"> {error} </h2>)}
-                {loading ? <Loader text="Fetching Messages" /> :
-                    <>
-                        {messages && messages.length > 0 ? messages.map((message) => (
-                            < div key={message.createdAt} id='message-box' className={generateMessageCSS(message.username)}>
-                                <div className="flex gap-3">
-                                    <p className="text-stone-800 text-sm md:text-base" style={{ overflowWrap: 'anywhere' }}>{message.text}</p>
-                                    <p className="text-sm text-stone-600 text-end place-self-end ">{moment(+(message.createdAt)).format('h:mm a')}</p>
-                                </div>
-                            </div>
-                        )) : <p>Message To Start Conversation</p>
-                        }
-                    </>
+                {messages && messages.length > 0 ? messages.map((message) => (
+                    < div key={message.createdAt} id='message-box' className={generateMessageCSS(message.username)}>
+                        <div className="flex gap-3">
+                            <p className="text-stone-800 text-sm md:text-base" style={{ overflowWrap: 'anywhere' }}>{message.text}</p>
+                            <p className="text-sm text-stone-600 text-end place-self-end ">{moment(+(message.createdAt)).format('h:mm a')}</p>
+                        </div>
+                    </div>
+                )) : <p className='w-full py-2 text-xl text-center'>Message To Start Conversation</p>
                 }
             </article >
             <article id="chat-input" >

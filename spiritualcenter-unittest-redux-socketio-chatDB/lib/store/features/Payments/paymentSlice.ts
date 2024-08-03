@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IPayment } from "@/lib/helpers/interfaces";
+import { ICompletedPayments, IPayment } from "@/lib/helpers/interfaces";
 import extraPaymentsReducers from "./extraReducers";
 
 export interface IPaymentsState {
-    payments: IPayment[],
+    payments: ICompletedPayments[],
     myPayments: IPayment[]
     loading: boolean,
     error: string | null

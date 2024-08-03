@@ -4,13 +4,21 @@ import { IUser } from "@/lib/helpers/interfaces";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { editUser } from "@/lib/store/features/Users/userSlice";
 import { deleteUser } from "@/lib/store/features/Users/fetchUsersApi";
+import { toast } from "react-hot-toast";
 
 const EditDeleteButtons = ({ users }: { users: IUser }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const handleDelete = (id: string) => {
-    dispatch(deleteUser(id));
+  const handleDelete = async (id: string) => {
+    try {
+      const resultAction = await dispatch(deleteUser(id));
+      if (deleteUser.fulfilled.match(resultAction)) {
+        toast.success("User Deleted Successfully")
+      }
+    } catch (error) {
+      console.log(console.error(error));
+    }
   };
 
   const handleEdit = (user: IUser, e: React.MouseEvent<HTMLButtonElement>) => {

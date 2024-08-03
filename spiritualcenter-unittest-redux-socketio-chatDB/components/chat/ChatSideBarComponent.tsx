@@ -6,11 +6,10 @@ import { ArrowLeftSquareIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import RenderImage from '../common/RenderImage'
-import Loader from '../common/Loader'
 
 const ChatSideBarComponent: React.FC<IChatSideBarProps> = ({ handleBroadcast, joinRoomHandler, chatList }) => {
     const { loggedInUser } = useAppSelector((state) => state.user);
-    const { loading, error } = useAppSelector((state) => state.chat)
+    const { error } = useAppSelector((state) => state.chat)
 
     const navigate = useRouter()
     const [sideSearch, setSideSearch] = useState<string>('')
@@ -47,23 +46,19 @@ const ChatSideBarComponent: React.FC<IChatSideBarProps> = ({ handleBroadcast, jo
                             <p className="text-xs text-slate-600">Broadcast Group</p>
                         </div>
                     </div>
-                    {loading ? <Loader text="Fetching Users" /> :
-                        <>
-                            {chatList && filterChatList.filter((user) => user.username !== loggedInUser?.split("-").slice(2).join("-")).map((usercard) => (
-                                <div className="flex h-16 gap-3 border border-slate-400 items-center m-1 p-1 rounded bg-slate-100 hover:bg-slate-200 hover:transition hover:cursor-pointer"
-                                    key={usercard._id} onClick={() => joinRoomHandler(usercard.fullName ? usercard.fullName.firstName : usercard.username, usercard.username, usercard.photo)}>
-                                    <div id="user-pic">
-                                        <RenderImage users='' css='h-14 w-14 border rounded-full' />
-                                    </div>
-                                    <div id="user">
-                                        <p className="text-sm md:text-xl text-slate-600">{usercard.fullName ? usercard.fullName.firstName : usercard.username}</p>
-                                        <span className="text-xs text-slate-400">({usercard.role})</span>
-                                        <span className="text-xs text-slate-400">({usercard.username})</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </>
-                    }
+                    {chatList && filterChatList.filter((user) => user.username !== loggedInUser?.split("-").slice(2).join("-")).map((usercard) => (
+                        <div className="flex h-16 gap-3 border border-slate-400 items-center m-1 p-1 rounded bg-slate-100 hover:bg-slate-200 hover:transition hover:cursor-pointer"
+                            key={usercard._id} onClick={() => joinRoomHandler(usercard.fullName ? usercard.fullName.firstName : usercard.username, usercard.username, usercard.photo)}>
+                            <div id="user-pic">
+                                <RenderImage users='' css='h-14 w-14 border rounded-full' />
+                            </div>
+                            <div id="user">
+                                <p className="text-sm md:text-xl text-slate-600">{usercard.fullName ? usercard.fullName.firstName : usercard.username}</p>
+                                <span className="text-xs text-slate-400">({usercard.role})</span>
+                                <span className="text-xs text-slate-400">({usercard.username})</span>
+                            </div>
+                        </div>
+                    ))}
                 </article>
             </div>
             {error && (<h2 id="error" className="text-center text-2xl text-amber-700 tracking-wide uppercase"> {error} </h2>)}

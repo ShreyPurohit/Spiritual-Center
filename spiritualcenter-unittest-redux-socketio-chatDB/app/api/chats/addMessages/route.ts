@@ -1,7 +1,6 @@
-import { NextResponse, NextRequest } from 'next/server';
 import connectMongoDb from '@/lib/connectDatabase';
 import GroupModel from '@/models/GroupModel';
-import moment from 'moment';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest, res: NextResponse) {
     try {

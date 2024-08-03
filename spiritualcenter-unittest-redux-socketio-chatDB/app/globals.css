@@ -43,7 +43,7 @@
   h1 {
     @apply text-center md:text-3xl text-2xl md:font-bold font-semibold tracking-wide md:mb-3 pb-1 lg:mt-3 text-stone-600 uppercase
   }
-
+/* 
   .scrollers::-webkit-scrollbar {
     display: none;
   }
@@ -51,6 +51,6 @@
   .scrollers {
     -ms-overflow-style: none;
     scrollbar-width: none;
-  }
+  } */
 
 }

@@ -6,27 +6,35 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
 const Loader = dynamic(() => import("../common/Loader"));
+import { toast } from "react-hot-toast";
 
 const PaidUsersComponent = () => {
   const dispatch = useAppDispatch();
   const { payments, loading, error } = useAppSelector((state) => state.payment);
 
   useEffect(() => {
-    dispatch(allPaymentsApi());
+    fetchPaidInEffect()
   }, [dispatch]);
+
+  const fetchPaidInEffect = async () => {
+    try {
+      const resultAction = await dispatch(allPaymentsApi())
+      if (allPaymentsApi.fulfilled.match(resultAction)) {
+        toast.success("Fetched Paid Users List")
+      }
+    } catch (error: any) {
+      console.log(error.message)
+    }
+  }
 
   return (
     <div className="overflow-x-auto text-center m-2 text-sm lg:text-base">
-      {loading ? (
-        <Loader text="Fetching All Payments" />
-      ) : (
-        <table
-          id="allPaymentList"
-          className="md:w-full table table-auto min-w-max"
-        >
+      {loading ? (<Loader text="Fetching All Payments" />) : (
+        <table id="allPaymentList" className="md:w-full table table-auto min-w-max" >
           <thead>
             <tr className="text-lg font-semibold tracking-wide">
-              <td>Made By</td>
+              <td>User Name</td>
+              <td>Full Name</td>
               <td>Month</td>
               <td>Year</td>
               <td>Total Amount</td>
@@ -37,16 +45,16 @@ const PaidUsersComponent = () => {
               <tr
                 key={pays._id}
                 id={`payment-${index}`}
-                className={classSwitch(pays.amount)?.classname}
+                className={classSwitch(pays.payments[index].amount)?.classname}
                 style={{
-                  backgroundColor: classSwitch(pays.amount)?.style,
-                  color: classSwitch(pays.amount)?.text,
-                }}
-              >
-                <td>{pays.made_by.toString()}</td>
-                <td>{pays.month}</td>
-                <td>{pays.year}</td>
-                <td>{pays.amount}</td>
+                  backgroundColor: classSwitch(pays.payments[index].amount)?.style,
+                  color: classSwitch(pays.payments[index].amount)?.text,
+                }} >
+                <td>{pays.username}</td>
+                <td>{pays.fullName.firstName} {pays.fullName.middleName} {pays.fullName.lastName}</td>
+                <td>{pays.payments[index].month}</td>
+                <td>{pays.payments[index].year}</td>
+                <td>{pays.payments[index].amount}</td>
               </tr>
             ))}
           </tbody>

@@ -1,20 +1,22 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useAppDispatch } from "@/lib/store/hooks";
-import { logoutReducer } from "@/lib/store/features/Users/userSlice";
+import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/lib/store/hooks';
+import { logoutUsersApi } from '@/lib/store/features/Users/fetchUsersApi';
 
 const LogoutComponent = () => {
-  const dispatch = useAppDispatch();
-
+  const router = useRouter();
+  const dispatch = useAppDispatch()
+  
   const handleLogout = () => {
-    dispatch(logoutReducer());
+    dispatch(logoutUsersApi())
+    router.push('/login');
   };
 
   return (
-    <Link id="donationBtn" href={"/login"} onClick={handleLogout}>
-      Logout User
-    </Link>
+    <button id="logoutBtn" onClick={handleLogout}>
+      LOGOUT USER
+    </button>
   );
 };
 

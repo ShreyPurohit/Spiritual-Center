@@ -9,6 +9,7 @@ import { IUserCreateInput } from "@/lib/helpers/interfaces";
 import { useAppSelector, useAppDispatch } from "@/lib/store/hooks";
 import { validateInitiationDate } from "@/lib/helpers/helperFunctions";
 import { addUsers, updateUser } from "@/lib/store/features/Users/fetchUsersApi";
+import toast from "react-hot-toast";
 
 interface AdminUserPageProps {
   user?: IUserCreateInput;
@@ -35,9 +36,7 @@ const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
     }
   }, [user, reset]);
 
-  const onSubmit: SubmitHandler<IUserCreateInput> = (
-    data: IUserCreateInput
-  ) => {
+  const onSubmit: SubmitHandler<IUserCreateInput> = async (data: IUserCreateInput) => {
     const formData = new FormData();
     formData.append("firstName", data.firstName);
     formData.append("middleName", data.middleName);
@@ -50,15 +49,26 @@ const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
     formData.append("email", data.email);
     formData.append("initiationDate", data.initiationDate);
     formData.append("imageUrl", data.imageUrl[0]);
-    if (!user) {
-      dispatch(addUsers(formData));
-    } else {
-      dispatch(updateUser(formData));
-    }
-    if (!loggedInUser) {
-      router.push(`/login`);
-    } else {
-      router.push(`/admin`);
+    try {
+      if (!user) {
+        const resultAction = await dispatch(addUsers(formData));
+        if (addUsers.fulfilled.match(resultAction)) {
+          toast.success("User Created Successfully")
+          router.push(`/admin/userlist`)
+        } else {
+          throw new Error('Login Failed')
+        }
+      } else {
+        const resultAction = await dispatch(updateUser(formData));
+        if (updateUser.fulfilled.match(resultAction)) {
+          toast.success("User Updated Successfully")
+          router.push(`/admin/userlist`)
+        } else {
+          throw new Error('Login Failed')
+        }
+      }
+    } catch (error) {
+
     }
   };
 
