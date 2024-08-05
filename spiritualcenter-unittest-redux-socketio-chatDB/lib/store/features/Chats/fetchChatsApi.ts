@@ -69,8 +69,6 @@ const fetchCurrentRoomMessages = createAsyncThunk(
         try {
             const response = await fetch(`/api/chats/fetchCurrentRoomMessages/${currentRoom}`)
             const { messages } = await response.json()
-            console.log(messages);
-
             return messages as IUserChat[]
         } catch (error: any) {
             return rejectWithValue(error.message)

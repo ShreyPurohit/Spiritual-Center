@@ -105,3 +105,12 @@ export interface IGroupSchema {
     roomID: string
     messages: IUserChat[]
 }
+
+interface DateData {
+    allowedMonths: string[];
+    allowedYears: string[];
+}
+
+export interface DateClientComponentProps {
+    dateData: DateData;
+}

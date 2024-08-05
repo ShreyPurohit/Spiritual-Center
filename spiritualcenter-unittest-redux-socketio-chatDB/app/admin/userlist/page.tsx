@@ -10,7 +10,7 @@ import { IUser } from "@/lib/helpers/interfaces";
 import { fetchAllUsers } from "@/lib/store/features/Users/fetchUsersApi";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 const AdminUserListPage = () => {
   const dispatch = useAppDispatch();
@@ -28,16 +28,18 @@ const AdminUserListPage = () => {
   }, [dispatch, currentPage]);
 
   const fetchUsersCall = async () => {
+    const toastID = toast.loading("Fetching Users")
     const resultAction = await dispatch(fetchAllUsers({ page: currentPage, limit: 4 }));
     if (fetchAllUsers.fulfilled.match(resultAction)) {
-      toast.success("Users Fetched Successfully")
+      return toast.success("Users Fetched Successfully", { id: toastID })
     }
   }
 
   const handlePageChange = async (newPage: number) => {
+    const toastID = toast.loading("Fetching Users")
     const resultAction = dispatch(fetchAllUsers({ page: newPage, limit: 4 }));
     if (fetchAllUsers.fulfilled.match(resultAction)) {
-      toast.success("Users Fetched Successfully")
+      return toast.success("Users Fetched Successfully", { id: toastID })
     }
     setAllUsers(user);
   };
@@ -74,10 +76,7 @@ const AdminUserListPage = () => {
               </thead>
               <tbody>
                 {users.length > 0 && users.map((user) => (
-                  <tr
-                    key={user._id}
-                    className="hover:bg-slate-200 hover:transition"
-                  >
+                  <tr key={user._id} className="hover:bg-slate-200 hover:transition" >
                     <td>{user.username}</td>
                     <td>{user.fullName.firstName}</td>
                     <td>{user.fullName.middleName}</td>

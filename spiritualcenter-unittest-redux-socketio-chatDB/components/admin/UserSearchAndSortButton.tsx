@@ -4,11 +4,7 @@ import { useState } from "react";
 import { IUser } from "@/lib/helpers/interfaces";
 import { handleAscending, handleDescending, handleSearch } from "@/lib/helpers/helperFunctions";
 
-const UserSearchSortButtons = ({ users, setUsers, allUsers }: {
-  users: IUser[];
-  setUsers: React.Dispatch<React.SetStateAction<IUser[]>>;
-  allUsers: IUser[];
-}) => {
+const UserSearchSortButtons = ({ users, setUsers, allUsers }: { users: IUser[]; setUsers: React.Dispatch<React.SetStateAction<IUser[]>>; allUsers: IUser[]; }) => {
   const [searchInput, setSearchInput] = useState("");
   return (
     <div className="m-5 flex flex-col md:flex-row gap-5 md:justify-center items-center">

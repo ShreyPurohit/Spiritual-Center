@@ -46,20 +46,6 @@ const makeUserName = (initiationDate: string, firstName: string, lastName: strin
     return `${year}-${fletter}-${lletter}-${month}`
 }
 
-const classSwitch = (amount: number) => {
-    if (amount >= 10000) {
-        return {
-            classname: 'bg-green',
-            style: 'green',
-            text: 'white'
-        }
-    } else {
-        return {
-            classname: '',
-            style: 'white'
-        }
-    }
-}
 
 const handleAscending = ({ users, setUsers }: { users: IUser[], setUsers: React.Dispatch<React.SetStateAction<IUser[]>> }) => {
     const sortedAsc = [...users].sort((a, b) => {
@@ -105,4 +91,4 @@ const handleSearch = ({ searchInput, users, setUsers, allUsers }: { searchInput:
     }
 };
 
-export { getdate, validateInitiationDate, makeUserName, classSwitch, handleAscending, handleDescending, handleSearch }
+export { getdate, validateInitiationDate, makeUserName, handleAscending, handleDescending, handleSearch }

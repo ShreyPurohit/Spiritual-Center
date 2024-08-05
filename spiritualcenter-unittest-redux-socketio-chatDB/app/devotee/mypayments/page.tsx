@@ -1,15 +1,14 @@
 "use client";
 
-import { classSwitch } from "@/lib/helpers/helperFunctions";
 import { myPaymentsApi } from "@/lib/store/features/Payments/fetchPaymentsApi";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 const Loader = dynamic(() => import("@/components/common/Loader"));
 
 const DevoteeMyPaymentsPage = () => {
-  const { error, loading, myPayments } = useAppSelector((state) => state.payment);
+  const { loading, myPayments } = useAppSelector((state) => state.payment);
   const { loggedInUser } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
@@ -21,8 +20,6 @@ const DevoteeMyPaymentsPage = () => {
     const resultAction = await dispatch(myPaymentsApi());
     if (myPaymentsApi.fulfilled.match(resultAction)) {
       toast.success("Payments Fetched Successfully")
-    } else {
-      throw new Error("Failed Fetching Payments")
     }
   }
 
@@ -45,11 +42,8 @@ const DevoteeMyPaymentsPage = () => {
                 <tr
                   id={`payment-${index}`}
                   key={pays._id}
-                  className={classSwitch(pays.amount)?.classname}
-                  style={{
-                    backgroundColor: classSwitch(pays.amount)?.style,
-                    textAlign: "center",
-                  }}
+                  className={pays.amount >= 10000 ? 'bg-green' : 'bg-white'}
+                  style={{ backgroundColor: pays.amount >= 10000 ? 'green' : 'white', textAlign: "center", }}
                 >
                   <td>{loggedInUser?.split("-").slice(2).join("-")}</td>
                   <td>{pays.month}</td>
@@ -61,12 +55,8 @@ const DevoteeMyPaymentsPage = () => {
           </table>
         </div>
       }
-      {error && (
-        <h2 id="authInfo" className="text-center text-2xl text-amber-700 tracking-wide uppercase">
-          {error === 'Error' ? "" : error}
-        </h2>
-      )}
     </>
   );
 };
+
 export default DevoteeMyPaymentsPage;

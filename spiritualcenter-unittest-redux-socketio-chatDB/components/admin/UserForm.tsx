@@ -9,7 +9,7 @@ import { IUserCreateInput } from "@/lib/helpers/interfaces";
 import { useAppSelector, useAppDispatch } from "@/lib/store/hooks";
 import { validateInitiationDate } from "@/lib/helpers/helperFunctions";
 import { addUsers, updateUser } from "@/lib/store/features/Users/fetchUsersApi";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 interface AdminUserPageProps {
   user?: IUserCreateInput;
@@ -50,25 +50,22 @@ const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
     formData.append("initiationDate", data.initiationDate);
     formData.append("imageUrl", data.imageUrl[0]);
     try {
+      const toastID = toast.loading("Loading...")
       if (!user) {
         const resultAction = await dispatch(addUsers(formData));
         if (addUsers.fulfilled.match(resultAction)) {
-          toast.success("User Created Successfully")
+          toast.success("User Created Successfully", { id: toastID })
           router.push(`/admin/userlist`)
-        } else {
-          throw new Error('Login Failed')
         }
       } else {
         const resultAction = await dispatch(updateUser(formData));
         if (updateUser.fulfilled.match(resultAction)) {
-          toast.success("User Updated Successfully")
+          toast.success("User Updated Successfully", { id: toastID })
           router.push(`/admin/userlist`)
-        } else {
-          throw new Error('Login Failed')
         }
       }
     } catch (error) {
-
+      console.log(error)
     }
   };
 
@@ -79,9 +76,7 @@ const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
         onSubmit={handleSubmit(onSubmit)}
         className="md:grid md:grid-cols-2 md:gap-2 lg:grid-cols-3 md:p-10 md:h-0"
       >
-        {loading ? (
-          <Loader text={user ? "Updating User.." : "Creating User.."} />
-        ) : (
+        {loading ? (<Loader text={user ? "Updating User.." : "Creating User.."} />) : (
           <>
             <div>
               <label htmlFor="firstName"> First Name </label>
@@ -99,7 +94,6 @@ const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
                     message: "For First Name minimum 3 char required",
                   },
                 })}
-                placeholder="First Name"
               />
               {errors.firstName && (
                 <span id="firstNameErr"> {errors.firstName.message} </span>

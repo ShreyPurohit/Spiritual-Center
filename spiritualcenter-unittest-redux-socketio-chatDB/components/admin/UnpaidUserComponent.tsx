@@ -17,9 +17,10 @@ const UnpaidUserComponent = () => {
 
   const fetchUnpaidInEffect = async () => {
     try {
+      const toastID = toast.loading("Fetching Unpaid User List...")
       const resultAction = await dispatch(fetchUnpaidUsersApi())
       if (fetchUnpaidUsersApi.fulfilled.match(resultAction)) {
-        toast.success("Fetched Unpaid Users List")
+        toast.success("Fetched Unpaid Users List", { id: toastID })
       }
     } catch (error: any) {
       console.log(error.message)

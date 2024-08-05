@@ -1,12 +1,4 @@
-const UserListPaginationButtons = ({
-  totalPages,
-  currentPage,
-  handlePageChange,
-}: {
-  totalPages: number;
-  currentPage: number;
-  handlePageChange: any;
-}) => {
+const UserListPaginationButtons = ({ totalPages, currentPage, handlePageChange, }: { totalPages: number; currentPage: number; handlePageChange: any; }) => {
   return (
     <div className="mt-2 flex justify-center gap-2">
       {Array.from({ length: totalPages }, (_, index) => (

@@ -24,6 +24,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         email: user.email,
         address: user.address,
         photo: user.photo,
+        initiationDate: user.initiationDate
       })
     );
 

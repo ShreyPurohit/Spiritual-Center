@@ -12,12 +12,13 @@ const EditDeleteButtons = ({ users }: { users: IUser }) => {
 
   const handleDelete = async (id: string) => {
     try {
+      const toastID = toast.loading("Loading...")
       const resultAction = await dispatch(deleteUser(id));
       if (deleteUser.fulfilled.match(resultAction)) {
-        toast.success("User Deleted Successfully")
+        toast.success("User Deleted Successfully", { id: toastID })
       }
     } catch (error) {
-      console.log(console.error(error));
+      console.log(error);
     }
   };
 

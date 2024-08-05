@@ -13,14 +13,12 @@ const handleRoleBasedRedirect = (req: NextRequest, role: string) => {
   const authToken = cookies["auth"];
 
   if (!authToken) {
-    console.log("returning from auth token");
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
   try {
     const decrypted = decrypt(authToken);
     if (!decrypted) {
-      console.log("returning from not decrypt");
       const response = NextResponse.redirect(new URL("/login", req.url));
       response.headers.set(
         "Set-Cookie",
@@ -35,7 +33,6 @@ const handleRoleBasedRedirect = (req: NextRequest, role: string) => {
     }
     return NextResponse.next();
   } catch (error) {
-    console.log("returning from catch");
     console.error("Error decrypting cookie:", error);
     const response = NextResponse.redirect(new URL("/login", req.url));
     response.headers.set(

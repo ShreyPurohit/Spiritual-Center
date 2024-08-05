@@ -40,13 +40,12 @@ const LoginPage = () => {
     formData.append("role", data.role);
     formData.append("otp", data.otp);
     try {
+      const toastID = toast.loading("Logging In...")
       const resultAction = await dispatch(loginUser(formData))
       if (loginUser.fulfilled.match(resultAction)) {
-        toast.success("Logged In User Successfully")
+        toast.success("Logged In User Successfully", { id: toastID })
         reset()
         router.push(`/${data.role}`)
-      } else {
-        throw new Error('Login Failed')
       }
     } catch (error: any) {
       toast.error(error.message)

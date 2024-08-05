@@ -1,6 +1,5 @@
 "use client";
 
-import { classSwitch } from "@/lib/helpers/helperFunctions";
 import { allPaymentsApi } from "@/lib/store/features/Payments/fetchPaymentsApi";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dynamic from "next/dynamic";
@@ -18,9 +17,10 @@ const PaidUsersComponent = () => {
 
   const fetchPaidInEffect = async () => {
     try {
+      const toastID = toast.loading("Fetching List...")
       const resultAction = await dispatch(allPaymentsApi())
       if (allPaymentsApi.fulfilled.match(resultAction)) {
-        toast.success("Fetched Paid Users List")
+        toast.success("Fetched Paid Users List", { id: toastID })
       }
     } catch (error: any) {
       console.log(error.message)
@@ -45,11 +45,8 @@ const PaidUsersComponent = () => {
               <tr
                 key={pays._id}
                 id={`payment-${index}`}
-                className={classSwitch(pays.payments[index].amount)?.classname}
-                style={{
-                  backgroundColor: classSwitch(pays.payments[index].amount)?.style,
-                  color: classSwitch(pays.payments[index].amount)?.text,
-                }} >
+                className={pays.payments[index].amount >= 10000 ? 'bg-green' : 'bg-white'}
+                style={{ backgroundColor: pays.payments[index].amount >= 10000 ? 'green' : 'white', textAlign: "center", }}>
                 <td>{pays.username}</td>
                 <td>{pays.fullName.firstName} {pays.fullName.middleName} {pays.fullName.lastName}</td>
                 <td>{pays.payments[index].month}</td>
