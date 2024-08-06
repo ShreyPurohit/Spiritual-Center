@@ -27,6 +27,10 @@ const AdminUserListPage = () => {
     fetchUsersCall()
   }, [dispatch, currentPage]);
 
+  if (!users) {
+    return <h1>Loading....</h1>
+  }
+
   const fetchUsersCall = async () => {
     const toastID = toast.loading("Fetching Users")
     const resultAction = await dispatch(fetchAllUsers({ page: currentPage, limit: 4 }));
@@ -81,15 +85,27 @@ const AdminUserListPage = () => {
                     <td>{user.fullName.firstName}</td>
                     <td>{user.fullName.middleName}</td>
                     <td>{user.fullName.lastName}</td>
-                    <td>{user.email}</td>
+                    <td>
+                      <div className="flex flex-col">
+                        <div>{user.email.split('@')[0]}</div>
+                        <div>@{user.email.split('@')[1]}</div>
+                      </div>
+                    </td>
                     <td>{user.address.flatNumber}</td>
-                    <td>{user.address.area}</td>
+                    <td>
+                    <div className="flex flex-col">
+                        <div>{user.address.area.split(' ')[0]}</div>
+                        <div>{user.address.area.split(' ')[1]}</div>
+                      </div>
+                    </td>
                     <td>{user.address.city}</td>
                     <td>{user.address.state}</td>
                     <td>{user.address.pinCode}</td>
                     <td>{getdate(user.initiationDate)}</td>
                     <td>
-                      <RenderImage css="w-20" users={user.photo} />
+                      <div className="relative h-20">
+                        <RenderImage css="w-14 md:w-20" users={user.photo} />
+                      </div>
                     </td>
                     <EditDeleteButtons users={user} />
                   </tr>

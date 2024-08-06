@@ -1,35 +1,44 @@
+import uploadToBucket from "@/lib/aws/uploadToBucket";
 import connectMongoDb from "@/lib/connectDatabase";
 import { makeUserName } from "@/lib/helpers/helperFunctions";
-import { IUserCreateInput } from "@/lib/helpers/interfaces";
 import UserModel from "@/models/UserModel";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest, res: NextResponse) {
-  const data: IUserCreateInput = await req.json();
-  const username = makeUserName(data.initiationDate, data.firstName, data.lastName);
-
+export async function POST(req: Request, res: NextResponse) {
   try {
-    await connectMongoDb();
-    const user = await UserModel.create({
+    const formData = await req.formData()
+    const body: any = Object.fromEntries(formData)
+    await connectMongoDb()
+    const image = body.imageUrl as File
+    const username = makeUserName(body.initiationDate, body.firstName, body.lastName);
+    if (image && !(image.type.includes('/jpeg') || image.type.includes('/png'))) {
+      return NextResponse.json({ message: "Please Upload Image Only", }, { status: 400 });
+    }
+    if (image) {
+      const fileBuffer = await image.arrayBuffer()
+      const buffer = Buffer.from(fileBuffer)
+      uploadToBucket(`${username}.${image.type.split('/')[1]}`, buffer)
+    }
+    const imgToDB = `${username}.${image.type.split('/')[1]}`
+    await UserModel.create({
       username,
       fullName: {
-        firstName: data.firstName,
-        middleName: data.middleName,
-        lastName: data.lastName,
+        firstName: body.firstName,
+        middleName: body.middleName,
+        lastName: body.lastName,
       },
       address: {
-        flatNumber: data.flatNumber,
-        pinCode: data.pinCode,
-        area: data.area,
-        city: data.city,
-        state: data.state,
+        flatNumber: body.flatNumber,
+        pinCode: body.pinCode,
+        area: body.area,
+        city: body.city,
+        state: body.state,
       },
-      email: data.email,
-      initiationDate: data.initiationDate,
-      photo: "",
+      email: body.email,
+      initiationDate: body.initiationDate,
+      photo: image ? imgToDB : "",
     });
-
-    return NextResponse.json({ message: "User Created Successfully", user, }, { status: 201 });
+    return NextResponse.json({ message: "User Created Successfully" }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ message: "Error Creating Users", error }, { status: 500 });
   }

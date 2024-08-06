@@ -40,8 +40,8 @@ const ChatAreaComponent: React.FC<IChatAreaProps> = ({ headerData, messages, han
                         <ArrowLeftCircle size={35} />
                     </div>
                     <div className="flex items-center gap-3">
-                        <div id="user-image">
-                            <RenderImage users={headerData.profilePic} css="h-14 w-14 rounded-full" />
+                        <div id="user-image" className='relative w-14 h-14 rounded-full'>
+                            <RenderImage users={headerData.profilePic} css="rounded-full" />
                         </div>
                         <div id="user-name">
                             <h2 className="lg:text-2xl text-lg uppercase text-stone-700">{headerData.fullName}</h2>

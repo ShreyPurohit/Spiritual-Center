@@ -92,7 +92,7 @@ export interface IChatAreaProps {
 export interface IChatSideBarProps {
     handleBroadcast: () => void,
     joinRoomHandler: (name: string, username: string, photo: string) => void,
-    chatList: IFetchUsers[]
+    chatList: IFetchUsers[],
 }
 
 export interface IUserChat {

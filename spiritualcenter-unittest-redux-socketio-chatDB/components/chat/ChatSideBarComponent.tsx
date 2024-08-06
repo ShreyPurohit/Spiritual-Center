@@ -39,22 +39,20 @@ const ChatSideBarComponent: React.FC<IChatSideBarProps> = ({ handleBroadcast, jo
                         className="w-3/4 self-center py-3 mb-3"
                     />
                     <div id="brodcastgroup" className="flex h-16 gap-3 border border-slate-400 items-center m-1 p-1 rounded bg-slate-100 hover:bg-slate-200 hover:transition hover:cursor-pointer" onClick={handleBroadcast}>
-                        <div id="user-pic">
-                            <RenderImage users='' css='h-14 w-14' />
+                        <div id="user-pic" >
+                            <RenderImage users='' css='h-10 w-10 rounded-full' />
                         </div>
                         <div id="broadcast-name">
-                            <p className="text-xs text-slate-600">Broadcast Group</p>
+                            <p className="text-xs md:text-lg text-slate-600">Broadcast Group</p>
                         </div>
                     </div>
                     {chatList && filterChatList.filter((user) => user.username !== loggedInUser?.split("-").slice(2).join("-")).map((usercard) => (
-                        <div className="flex h-16 gap-3 border border-slate-400 items-center m-1 p-1 rounded bg-slate-100 hover:bg-slate-200 hover:transition hover:cursor-pointer"
-                            key={usercard._id} onClick={() => joinRoomHandler(usercard.fullName ? usercard.fullName.firstName : usercard.username, usercard.username, usercard.photo)}>
-                            <div id="user-pic">
-                                <RenderImage users='' css='h-14 w-14 border rounded-full' />
+                        <div className="flex h-16 gap-3 border border-slate-400 items-center m-1 p-1 rounded bg-slate-100 hover:bg-slate-200 hover:transition hover:cursor-pointer" key={usercard._id} onClick={() => joinRoomHandler(usercard.fullName ? usercard.fullName.firstName : usercard.username, usercard.username, usercard.photo)}>
+                            <div id="user-pic" className='relative w-10 h-10 rounded-full'>
+                                <RenderImage users={usercard.photo} css='rounded-full' />
                             </div>
-                            <div id="user">
-                                <p className="text-sm md:text-xl text-slate-600">{usercard.fullName ? usercard.fullName.firstName : usercard.username}</p>
-                                <span className="text-xs text-slate-400">({usercard.role})</span>
+                            <div id="user" className='flex items-center gap-4'>
+                                <p className="text-sm md:text-lg text-slate-600">{usercard.fullName ? usercard.fullName.firstName : usercard.username}</p>
                                 <span className="text-xs text-slate-400">({usercard.username})</span>
                             </div>
                         </div>

@@ -14,7 +14,7 @@ const extraUserReducers = (builder: ActionReducerMapBuilder<IUserState>) => {
     })
     builder.addCase(alreadyLoggedIn.rejected, (state, action) => {
         state.loading = false
-        state.error = action.error.message || "Failed To Fetch Users"
+        state.error = action.error.message || "Failed To Fetch Already Logged In User"
     })
 
     // Fetching Users---------------------------------------------------------------------
@@ -79,13 +79,9 @@ const extraUserReducers = (builder: ActionReducerMapBuilder<IUserState>) => {
     })
 
     // Update Users-----------------------------------------------------------------------
-    builder.addCase(updateUser.fulfilled, (state, action) => {
+    builder.addCase(updateUser.fulfilled, (state) => {
         state.loading = false
         state.error = null
-        const index = state.user.findIndex(user => user.id === action.payload.id)
-        if (index !== -1) {
-            state.user[index] = action.payload
-        }
         state.editUser = null
     })
     builder.addCase(updateUser.pending, (state) => {
@@ -94,7 +90,7 @@ const extraUserReducers = (builder: ActionReducerMapBuilder<IUserState>) => {
     })
     builder.addCase(updateUser.rejected, (state, action) => {
         state.loading = false
-        state.error = String(action.payload) || "Failed To Delete User"
+        state.error = String(action.payload) || "Failed To Update User"
     })
 
     // Fetch Unpaid Users-----------------------------------------------------------------

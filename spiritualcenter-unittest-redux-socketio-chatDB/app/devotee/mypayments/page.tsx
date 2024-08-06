@@ -17,9 +17,10 @@ const DevoteeMyPaymentsPage = () => {
   }, [loggedInUser]);
 
   const getMyPayments = async () => {
+    const toastID = toast.loading("Fetching My Payments...")
     const resultAction = await dispatch(myPaymentsApi());
     if (myPaymentsApi.fulfilled.match(resultAction)) {
-      toast.success("Payments Fetched Successfully")
+      toast.success("Payments Fetched Successfully", { id: toastID })
     }
   }
 

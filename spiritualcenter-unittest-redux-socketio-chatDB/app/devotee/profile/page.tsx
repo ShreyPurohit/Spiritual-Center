@@ -1,3 +1,5 @@
+'use server'
+
 import RenderImage from "@/components/common/RenderImage";
 import { decrypt } from "@/lib/auth/auth";
 import { cookies } from "next/headers";
@@ -12,10 +14,9 @@ const MyProfilePage = () => {
       <h1 className="mt-5">My Profile</h1>
       <section className="flex justify-center mt-5">
         <div className="flex flex-col items-center bg-slate-200 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:shadow-none">
-          <RenderImage
-            css="object-cover w-full rounded-t-lg h-64 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-            users={userData.photo ? userData.photo : ""}
-          />
+          <div className="relative w-64 h-56">
+            <RenderImage css="" users={userData.photo ? userData.photo : ""} />
+          </div>
           <div
             id="body"
             className="flex flex-col justify-between p-4 leading-normal"

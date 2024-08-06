@@ -4,8 +4,8 @@ import { allPaymentsApi } from "@/lib/store/features/Payments/fetchPaymentsApi";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import dynamic from "next/dynamic";
 import { useEffect } from "react";
-const Loader = dynamic(() => import("../common/Loader"));
 import { toast } from "react-hot-toast";
+const Loader = dynamic(() => import("../common/Loader"));
 
 const PaidUsersComponent = () => {
   const dispatch = useAppDispatch();

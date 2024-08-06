@@ -59,10 +59,9 @@ const fetchAllUsers = createAsyncThunk(
 const addUsers = createAsyncThunk(
     "users/createUser",
     async (formData: FormData, { rejectWithValue }) => {
-        const body = Object.fromEntries(formData)
         try {
             const response = await fetch('http://localhost:3000/api/users/createuser',
-                { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "multipart/form-data" } })
+                { method: "POST", body: formData })
             if (!response.ok) {
                 throw new Error('Failed to Create User');
             }
@@ -97,17 +96,14 @@ const updateUser = createAsyncThunk(
         const state = getState() as RootState
         const username = state.user.editUser?.username
         if (!username) throw new Error("User ID Not Found")
-        const body = Object.fromEntries(formData)
         try {
-            const response = await fetch(`http://localhost:3000/api/users/updateUser/${username}`, {
-                method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" }
-            })
+            const response = await fetch(`http://localhost:3000/api/users/updateUser/${username}`, { method: "PUT", body: formData })
             if (!response.ok) {
                 const { message } = await response.json()
                 throw new Error(message);
             }
-            const { newuser } = await response.json()
-            return newuser
+            const { message } = await response.json()
+            return message
         } catch (error: any) {
             return rejectWithValue(error.message)
         }
@@ -156,4 +152,5 @@ const setEditUser = (state: IUserState, action: PayloadAction<IUser>) => {
     state.editUser = action.payload
 }
 
-export { addUsers, alreadyLoggedIn, deleteUser, fetchAllUsers, fetchUnpaidUsersApi, loginUser, setEditUser, updateUser, logoutUsersApi }
+export { addUsers, alreadyLoggedIn, deleteUser, fetchAllUsers, fetchUnpaidUsersApi, loginUser, logoutUsersApi, setEditUser, updateUser }
+

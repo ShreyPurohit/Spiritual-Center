@@ -6,8 +6,9 @@ const RenderImage = ({ users, css }: { users: string; css: string }) => {
     if (users) {
       return (
         <Image
-          src={`${process.env.AWS_PROFILE_URL}/${users}`}
-          className="min-w-20 h-20 md:w-32 md:h-32 object-cover mx-auto"
+          src={`${process.env.NEXT_PUBLIC_AWS_PROFILE_URL}/${users}`}
+          fill
+          sizes=""
           alt="User Image"
         />
       );
