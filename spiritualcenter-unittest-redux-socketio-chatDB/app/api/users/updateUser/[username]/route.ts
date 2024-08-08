@@ -9,17 +9,21 @@ export async function PUT(req: Request, { params }: { params: { username: string
     const formData = await req.formData()
     const body: any = Object.fromEntries(formData)
     await connectMongoDb()
-    const image = body.imageUrl as File
+    const image = body.imageUrl as any
     const username = makeUserName(body.initiationDate, body.firstName, body.lastName);
-    if (image && !(image.type.includes('/jpeg') || image.type.includes('/png'))) {
+    if (image !== 'undefined' && !(image.type.includes('/jpeg') || image.type.includes('/png'))) {
       return NextResponse.json({ message: "Please Upload Image Only", }, { status: 400 });
     }
-    if (image) {
+    if (image !== 'undefined') {
       const fileBuffer = await image.arrayBuffer()
       const buffer = Buffer.from(fileBuffer)
       uploadToBucket(`${username}.${image.type.split('/')[1]}`, buffer)
     }
-    const imgToDB = `${username}.${image.type.split('/')[1]}`
+
+    const imgToDB = () => {
+      if (image === "undefined") { return "" }
+      return `${username}.${image.type.split('/')[1]}`
+    }
 
     await UserModel.findOneAndUpdate({ username: params.username },
       {
@@ -38,7 +42,7 @@ export async function PUT(req: Request, { params }: { params: { username: string
         },
         email: body.email,
         initiationDate: body.initiationDate,
-        photo: imgToDB,
+        photo: imgToDB(),
       },
       { new: true, runValidators: true }
     );

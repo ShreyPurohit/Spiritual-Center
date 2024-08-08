@@ -31,7 +31,7 @@ const DevoteePayOnlinePage: React.FC<DateClientComponentProps> = ({ dateData }) 
                 router.push(`/devotee/mypayments`)
             }
         } catch (error: any) {
-            toast.error(error.message)
+            toast.error(error)
         }
     };
 

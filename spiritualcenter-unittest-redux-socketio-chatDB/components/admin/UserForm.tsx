@@ -18,7 +18,7 @@ interface AdminUserPageProps {
 const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { loading, error, loggedInUser } = useAppSelector((state) => state.user);
+  const { loading, error } = useAppSelector((state) => state.user);
 
   const {
     register,
@@ -56,12 +56,20 @@ const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
         if (addUsers.fulfilled.match(resultAction)) {
           toast.success("User Created Successfully", { id: toastID })
           router.push(`/admin/userlist`)
+        } else {
+          setTimeout(() => {
+            toast.error(error, { id: toastID })
+          }, 2000);
         }
       } else {
         const resultAction = await dispatch(updateUser(formData));
         if (updateUser.fulfilled.match(resultAction)) {
           toast.success("User Updated Successfully", { id: toastID })
           router.push(`/admin/userlist`)
+        } else {
+          setTimeout(() => {
+            toast.error(error, { id: toastID })
+          }, 2000);
         }
       }
     } catch (error) {
@@ -71,18 +79,19 @@ const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
 
   return (
     <main className="p-2">
-      <h1>{user ? "Edit User" : "Create User"}</h1>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="md:grid md:grid-cols-2 md:gap-2 lg:grid-cols-3 md:p-10 md:h-0"
-      >
-        {loading ? (<Loader text={user ? "Updating User.." : "Creating User.."} />) : (
+      <h1>{user ? "Edit User Page" : "Create User Page"}</h1>
+      {loading ? (<Loader text={user ? "Updating User.." : "Creating User.."} />) : (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="md:grid md:grid-cols-2 md:gap-2 lg:grid-cols-3 md:p-10 md:h-0"
+        >
           <>
             <div>
               <label htmlFor="firstName"> First Name </label>
               <input
                 type="text"
                 id="firstName"
+                placeholder="First Name"
                 {...register("firstName", {
                   required: { value: true, message: "First Name is required" },
                   maxLength: {
@@ -279,13 +288,15 @@ const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
               </button>
             </div>
           </>
-        )}
-      </form>
-      {error && (
-        <h2 className="text-center text-2xl text-amber-700 tracking-wide uppercase">
-          {error}
-        </h2>
+        </form>
       )}
+      <div>
+        {error && (
+          <h2 className="text-center text-2xl text-amber-700 tracking-wide uppercase">
+            {error}
+          </h2>
+        )}
+      </div>
     </main>
   );
 };

@@ -82,8 +82,8 @@ const handleSearch = ({ searchInput, users, setUsers, allUsers }: { searchInput:
             user.username.toLowerCase().includes(searchInput.toLowerCase()) ||
             user.email.toLowerCase().includes(searchInput.toLowerCase()) ||
             user.address.area.toLowerCase().includes(searchInput.toLowerCase())
-        );
-        if (filteredUsers) {
+        )
+        if (filteredUsers.length > 0) {
             setUsers(filteredUsers);
         }
     } else {

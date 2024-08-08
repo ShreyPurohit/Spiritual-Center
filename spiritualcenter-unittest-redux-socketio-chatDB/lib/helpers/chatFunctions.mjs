@@ -16,7 +16,7 @@ const generateMessage = (username, text) => {
 
 const addUser = ({ id, username, room }) => {
     // Clean The Data
-    username = username.trim().toLowerCase()
+    username = username.trim()
     room = room.trim().toLowerCase()
     // Validate Data
     if (!username || !room) {

@@ -1,6 +1,6 @@
-import { NextResponse, NextRequest } from 'next/server';
 import connectMongoDb from '@/lib/connectDatabase';
 import GroupModel from '@/models/GroupModel';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest, { params }: { params: { currentRoom: string } }) {
     try {

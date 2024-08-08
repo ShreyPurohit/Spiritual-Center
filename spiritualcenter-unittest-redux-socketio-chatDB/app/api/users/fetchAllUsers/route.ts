@@ -24,9 +24,6 @@ export async function GET(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json(
-      { message: "Error fetching users", error },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Error fetching users", error }, { status: 500 });
   }
 }

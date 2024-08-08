@@ -32,18 +32,16 @@ const AdminUserListPage = () => {
   }
 
   const fetchUsersCall = async () => {
-    const toastID = toast.loading("Fetching Users")
     const resultAction = await dispatch(fetchAllUsers({ page: currentPage, limit: 4 }));
     if (fetchAllUsers.fulfilled.match(resultAction)) {
-      return toast.success("Users Fetched Successfully", { id: toastID })
+      return toast.success("Users Fetched Successfully")
     }
   }
 
-  const handlePageChange = async (newPage: number) => {
-    const toastID = toast.loading("Fetching Users")
+  const handlePageChange = (newPage: number) => {
     const resultAction = dispatch(fetchAllUsers({ page: newPage, limit: 4 }));
     if (fetchAllUsers.fulfilled.match(resultAction)) {
-      return toast.success("Users Fetched Successfully", { id: toastID })
+      return toast.success("Users Fetched Successfully")
     }
     setAllUsers(user);
   };

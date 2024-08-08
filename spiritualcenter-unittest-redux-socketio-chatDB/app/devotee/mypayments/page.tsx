@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast";
 const Loader = dynamic(() => import("@/components/common/Loader"));
 
 const DevoteeMyPaymentsPage = () => {
-  const { loading, myPayments } = useAppSelector((state) => state.payment);
+  const { loading, myPayments, error } = useAppSelector((state) => state.payment);
   const { loggedInUser } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
@@ -17,10 +17,9 @@ const DevoteeMyPaymentsPage = () => {
   }, [loggedInUser]);
 
   const getMyPayments = async () => {
-    const toastID = toast.loading("Fetching My Payments...")
     const resultAction = await dispatch(myPaymentsApi());
     if (myPaymentsApi.fulfilled.match(resultAction)) {
-      toast.success("Payments Fetched Successfully", { id: toastID })
+      toast.success("Payments Fetched Successfully")
     }
   }
 

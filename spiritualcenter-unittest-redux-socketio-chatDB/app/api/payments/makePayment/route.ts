@@ -1,7 +1,7 @@
-import PaymentModel from "@/models/PaymentModel";
 import connectMongoDb from "@/lib/connectDatabase";
-import { NextRequest, NextResponse } from 'next/server'
 import { IPayment } from "@/lib/helpers/interfaces";
+import PaymentModel from "@/models/PaymentModel";
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const data: IPayment = await req.json()
@@ -29,10 +29,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         year: data.year,
         amount: data.amount
       })
-      return NextResponse.json({
-        message: "Payment Created Successfully",
-        payment
-      }, { status: 201 })
+      return NextResponse.json({ message: "Payment Created Successfully", payment }, { status: 201 })
     }
   } catch (error) {
     return NextResponse.json({ message: 'Error Making Payment', error }, { status: 500 });

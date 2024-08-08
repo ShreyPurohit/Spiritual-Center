@@ -29,30 +29,34 @@ const PaidUsersComponent = () => {
 
   return (
     <div className="overflow-x-auto text-center m-2 text-sm lg:text-base">
-      {loading ? (<Loader text="Fetching All Payments" />) : (
-        <table id="allPaymentList" className="md:w-full table table-auto min-w-max" >
+      {loading ? (
+        <Loader text="Fetching All Payments" />
+      ) : (
+        <table id="allPaymentList" className="md:w-full table table-auto min-w-max">
           <thead>
             <tr className="text-lg font-semibold tracking-wide">
-              <td>User Name</td>
-              <td>Full Name</td>
-              <td>Month</td>
-              <td>Year</td>
-              <td>Total Amount</td>
+              <th>User Name</th>
+              <th>Full Name</th>
+              <th>Month</th>
+              <th>Year</th>
+              <th>Total Amount</th>
             </tr>
           </thead>
           <tbody>
-            {payments.map((pays, index) => (
-              <tr
-                key={pays._id}
-                id={`payment-${index}`}
-                className={pays.payments[index].amount >= 10000 ? 'bg-green' : 'bg-white'}
-                style={{ backgroundColor: pays.payments[index].amount >= 10000 ? 'green' : 'white', textAlign: "center", }}>
-                <td>{pays.username}</td>
-                <td>{pays.fullName.firstName} {pays.fullName.middleName} {pays.fullName.lastName}</td>
-                <td>{pays.payments[index].month}</td>
-                <td>{pays.payments[index].year}</td>
-                <td>{pays.payments[index].amount}</td>
-              </tr>
+            {payments.map((pays) => (
+              pays.payments.map((payment, index) => (
+                <tr
+                  key={`${pays._id}-${index}`}
+                  className={payment.amount >= 10000 ? 'bg-green' : 'bg-white'}
+                  style={{ backgroundColor: payment.amount >= 10000 ? 'green' : 'white', textAlign: "center" }}
+                >
+                  <td>{pays.username}</td>
+                  <td>{pays.fullName.firstName} {pays.fullName.middleName} {pays.fullName.lastName}</td>
+                  <td>{payment.month}</td>
+                  <td>{payment.year}</td>
+                  <td>{payment.amount}</td>
+                </tr>
+              ))
             ))}
           </tbody>
         </table>

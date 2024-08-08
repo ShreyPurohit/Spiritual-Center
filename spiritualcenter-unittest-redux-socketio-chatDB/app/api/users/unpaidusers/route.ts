@@ -7,25 +7,13 @@ export async function GET() {
     await connectMongoDb();
     const unpaidUsers = await UserModel.aggregate([
       {
-        $lookup: {
-          from: "payments",
-          localField: "_id",
-          foreignField: "made_by",
-          as: "payments",
-        },
+        $lookup: { from: "payments", localField: "_id", foreignField: "made_by", as: "payments", },
       },
       {
-        $match: {
-          $and: [{ payments: { $size: 0 } }, { role: { $ne: "admin" } }],
-        },
+        $match: { $and: [{ payments: { $size: 0 } }, { role: { $ne: "admin" } }], },
       },
       {
-        $project: {
-          fullName : 1,
-          email: 1,
-          address: 1,
-          username: 1
-        }
+        $project: { fullName: 1, email: 1, address: 1, username: 1 }
       }
     ]);
     return NextResponse.json({ message: "Unpaid Users Fetched Successfully", unpaidUsers, });

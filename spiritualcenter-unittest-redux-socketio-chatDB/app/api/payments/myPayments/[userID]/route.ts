@@ -1,11 +1,8 @@
-import PaymentModel from "@/models/PaymentModel";
 import connectMongoDb from "@/lib/connectDatabase";
+import PaymentModel from "@/models/PaymentModel";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { userID: string } }
-) {
+export async function GET(req: NextRequest, { params }: { params: { userID: string } }) {
   try {
     await connectMongoDb();
     const myPayments = await PaymentModel.find({
@@ -19,9 +16,6 @@ export async function GET(
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json(
-      { message: "Error Fetching My Payments", error },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Error Fetching My Payments", error }, { status: 500 });
   }
 }

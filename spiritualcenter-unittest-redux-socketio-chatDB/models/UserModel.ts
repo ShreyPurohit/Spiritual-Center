@@ -85,7 +85,10 @@ const userSchema: Schema<IUser> = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: [ERole.admin, ERole.devotee],
+      enum: {
+        values: [ERole.admin, ERole.devotee],
+        message: `{VALUE} is not supported`
+      },
       default: ERole.devotee,
       required: true,
     }

@@ -12,7 +12,7 @@ import { socket } from "../socket";
 export default function Home() {
 
     const { loggedInUser } = useAppSelector((state) => state.user);
-    const { userlist, currentRoom, messages } = useAppSelector((state) => state.chat)
+    const { userlist, currentRoom, messages, error } = useAppSelector((state) => state.chat)
     const dispatch = useAppDispatch()
     const [inputValue, setInputValue] = useState("")
     const [messagesFromUI, setMessages] = useState<IUserChat[]>([])
@@ -41,7 +41,7 @@ export default function Home() {
         if (getChatUsersList.fulfilled.match(resultAction)) {
             console.log("User List Fetched Successfully")
         } else {
-            throw new Error("Failed Fetching Payments")
+            toast.error(error)
         }
     }
 

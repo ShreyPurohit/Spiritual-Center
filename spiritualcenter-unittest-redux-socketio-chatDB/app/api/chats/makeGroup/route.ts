@@ -1,6 +1,6 @@
 import connectMongoDb from "@/lib/connectDatabase";
 import GroupModel from "@/models/GroupModel";
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try {

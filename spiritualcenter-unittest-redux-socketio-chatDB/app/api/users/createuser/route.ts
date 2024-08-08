@@ -9,18 +9,23 @@ export async function POST(req: Request, res: NextResponse) {
     const formData = await req.formData()
     const body: any = Object.fromEntries(formData)
     await connectMongoDb()
-    const image = body.imageUrl as File
+    const image = body.imageUrl as any
+
     const username = makeUserName(body.initiationDate, body.firstName, body.lastName);
-    if (image && !(image.type.includes('/jpeg') || image.type.includes('/png'))) {
+    if (image !== 'undefined' && !(image.type.includes('/jpeg') || image.type.includes('/png'))) {
       return NextResponse.json({ message: "Please Upload Image Only", }, { status: 400 });
     }
-    if (image) {
+    if (image !== "undefined") {
       const fileBuffer = await image.arrayBuffer()
       const buffer = Buffer.from(fileBuffer)
       uploadToBucket(`${username}.${image.type.split('/')[1]}`, buffer)
     }
-    const imgToDB = `${username}.${image.type.split('/')[1]}`
-    await UserModel.create({
+    const imgToDB = () => {
+      if (image === "undefined") { return "" }
+      return `${username}.${image.type.split('/')[1]}`
+    }
+
+    const createdUser = await UserModel.create({
       username,
       fullName: {
         firstName: body.firstName,
@@ -36,8 +41,9 @@ export async function POST(req: Request, res: NextResponse) {
       },
       email: body.email,
       initiationDate: body.initiationDate,
-      photo: image ? imgToDB : "",
+      photo: imgToDB(),
     });
+    if (!createdUser) return NextResponse.json({ message: "Error" }, { status: 500 })
     return NextResponse.json({ message: "User Created Successfully" }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ message: "Error Creating Users", error }, { status: 500 });

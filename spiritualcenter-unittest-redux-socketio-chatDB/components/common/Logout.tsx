@@ -13,7 +13,7 @@ const LogoutComponent = () => {
     const toastID = toast.loading("Logging Out...")
     const resultAction = await dispatch(logoutUsersApi())
     if (logoutUsersApi.fulfilled.match(resultAction)) {
-      toast.success("User Logged Out Successfully", { id: toastID })
+      toast.success("Logged Out Successfully", { id: toastID })
     }
     router.push('/login');
   };

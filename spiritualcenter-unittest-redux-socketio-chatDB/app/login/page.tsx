@@ -46,9 +46,13 @@ const LoginPage = () => {
         toast.success("Logged In User Successfully", { id: toastID })
         reset()
         router.push(`/${data.role}`)
+      } else {
+        setTimeout(() => {
+          toast.error(error, { id: toastID })
+        }, 2000);
       }
     } catch (error: any) {
-      toast.error(error.message)
+      console.log(error)
     }
   };
 
@@ -66,7 +70,7 @@ const LoginPage = () => {
       <h1>LOGIN USER</h1>
       <form
         onSubmit={handleSubmit(onSubmit)} className="flex flex-col md:w-1/2 m-auto p-5 gap-5 md:mt-5 md:border border-black drop-shadow-md" >
-        {loading ? (<Loader text={"Logging In..."} />) : (
+        {loading ? (<Loader text={"Loading..."} />) : (
           <>
             <div>
               <label htmlFor="username">Username </label>
@@ -141,7 +145,7 @@ const LoginPage = () => {
       {error && (
         <h2
           id="authInfo"
-          className="text-center text-2xl text-amber-700 tracking-wide uppercase"
+          className="text-center text-2xl text-amber-700 tracking-wide"
         >
           {error === 'Rejected' ? "" : error}
         </h2>
