@@ -26,7 +26,7 @@ const UserSearchSortButtons = ({ users, setUsers, allUsers }: { users: IUser[]; 
       }
       if (searchInput) {
         const data = await getUserNames(searchInput)
-        setDbNames(data?.userNames)
+        setDbNames(JSON.parse(data!).userNames)
       } else {
         setDbNames([])
       }

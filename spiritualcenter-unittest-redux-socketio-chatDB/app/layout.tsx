@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import dynamic from 'next/dynamic';
-import { Inter } from "next/font/google";
+import { Recursive } from "next/font/google";
 import { Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
 import "./globals.css";
 import StoreProvider from "./StoreProvider";
 const Loader = dynamic(() => import("@/components/common/Loader"))
 
-const inter = Inter({ subsets: ["latin"] });
+const recursive = Recursive({ subsets: ["latin"], weight: ["500"] });
 
 export const metadata: Metadata = {
   title: "Spiritual Center",
@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={recursive.className}>
         <Suspense fallback={<Loader text="Loading.." />}>
           <main className="bg-slate-700 [scrollbar-gutter:stable]">
             <Toaster position="bottom-right" />

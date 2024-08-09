@@ -16,24 +16,24 @@ const ChatAreaComponent: React.FC<IChatAreaProps> = ({ headerData, messages, han
         const loggedInUsername = loggedInUser?.split("-").slice(2).join("-");
         console.log(`Generating CSS for username: ${username}`);
         console.log(`Logged in username: ${loggedInUsername}`);
-     
+
         if (username === 'ADMIN') {
             console.log('CSS for ADMIN');
             return 'self-center px-6 py-3 rounded border border-black text-gray-200 gap-3 m-1';
         }
-     
+
         if (username === loggedInUsername) {
             console.log('CSS for self message');
             return 'self-end px-6 py-3 rounded-md bg-blue-300 max-w-xs lg:max-w-md text-gray-200 gap-3 m-1';
         }
-     
+
         if (username !== loggedInUsername) {
             console.log(loggedInUsername);
-            
+
             console.log('CSS for other user message');
             return 'self-start px-6 py-3 rounded-md bg-gray-300 max-w-xs lg:max-w-md text-gray-200 gap-3 m-1';
         }
-     
+
         // Default case (this should not be reached if all conditions are covered)
         console.log('CSS for default case');
         return '';

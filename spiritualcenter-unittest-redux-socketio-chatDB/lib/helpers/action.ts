@@ -5,13 +5,13 @@ import connectMongoDb from "../connectDatabase";
 
 export const getUserNames = async (name: string) => {
     try {
-        const result = await fetch(`http://localhost:3000/api/users/name?name=${name}`);
-        if (!result.ok) {
-            throw new Error('Failed to fetch character names');
-        }
-        const { userNames } = await result.json();
+        await connectMongoDb()
+        const userNames = await UserModel.aggregate([
+            { $match: { "fullName.firstName": { $regex: name, $options: "i", }, }, },
+            { $project: { fullName: 1, }, },
+        ])
 
-        return { userNames };
+        return JSON.stringify({userNames});
     } catch (error) {
         console.error(error);
     }

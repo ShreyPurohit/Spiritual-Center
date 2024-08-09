@@ -12,7 +12,7 @@ import { addUsers, updateUser } from "@/lib/store/features/Users/fetchUsersApi";
 import { toast } from "react-hot-toast";
 
 interface AdminUserPageProps {
-  user?: IUserCreateInput;
+  user?: Partial<IUserCreateInput>;
 }
 
 const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
@@ -80,7 +80,7 @@ const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
   return (
     <main className="p-2">
       <h1>{user ? "Edit User Page" : "Create User Page"}</h1>
-      {loading ? (<Loader text={user ? "Updating User.." : "Creating User.."} />) : (
+      {loading ? (<Loader text={"Loading..."} />) : (
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="md:grid md:grid-cols-2 md:gap-2 lg:grid-cols-3 md:p-10 md:h-0"

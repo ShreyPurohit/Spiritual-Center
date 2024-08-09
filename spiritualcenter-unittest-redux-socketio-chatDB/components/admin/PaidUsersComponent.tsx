@@ -48,7 +48,7 @@ const PaidUsersComponent = () => {
                 <tr
                   key={`${pays._id}-${index}`}
                   className={payment.amount >= 10000 ? 'bg-green' : 'bg-white'}
-                  style={{ backgroundColor: payment.amount >= 10000 ? 'green' : 'white', textAlign: "center" }}
+                  style={{ backgroundColor: payment.amount >= 10000 ? 'lightgreen' : 'white', textAlign: "center" }}
                 >
                   <td>{pays.username}</td>
                   <td>{pays.fullName.firstName} {pays.fullName.middleName} {pays.fullName.lastName}</td>
