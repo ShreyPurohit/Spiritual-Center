@@ -30,9 +30,7 @@ const initialState: IUserState = {
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {
-        editUser: setEditUser
-    },
+    reducers: { editUser: setEditUser },
     extraReducers: extraUserReducers
 })
 

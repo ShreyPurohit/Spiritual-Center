@@ -61,6 +61,7 @@ const extraUserReducers = (builder: ActionReducerMapBuilder<IUserState>) => {
     builder.addCase(loginUser.rejected, (state, action) => {
         state.loading = false
         state.error = String(action.payload) || "Failed To Login User"
+        debugger
     })
 
     // Deleting Users---------------------------------------------------------------------

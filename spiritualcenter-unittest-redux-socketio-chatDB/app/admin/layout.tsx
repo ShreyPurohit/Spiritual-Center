@@ -1,7 +1,7 @@
+'use server'
+
 import dynamic from "next/dynamic";
-const AdminNavigationComponent = dynamic(
-  () => import("@/components/admin/NavBarComponent")
-);
+const AdminNavigationComponent = dynamic(() => import("@/components/admin/NavBarComponent"));
 
 const AdminLayoutPage = ({ children }: { children: React.ReactNode }) => {
   return (
