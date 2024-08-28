@@ -43,8 +43,8 @@ const UserSearchSortButtons = ({ users, setUsers, allUsers }: { users: IUser[]; 
   }
 
   const handleDynamicSearch = () => {
-    users.map((username) => {
-      const fName = username.fullName.firstName
+    users.forEach((user) => {
+      const fName = user.fullName.firstName
       if (fName !== searchInput) {
         return handleDBSearch()
       } else {

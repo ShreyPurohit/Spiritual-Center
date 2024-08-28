@@ -40,8 +40,8 @@ const ChatSideBarComponent: React.FC<IChatSideBarProps> = ({ handleBroadcast, jo
                         className="w-3/4 self-center py-3 mb-3"
                     />
                     <div id="brodcastgroup" className="flex h-16 gap-3 border border-slate-400 items-center m-1 p-1 rounded bg-slate-100 hover:bg-slate-200 hover:transition hover:cursor-pointer" onClick={handleBroadcast}>
-                        <div id="user-pic" >
-                            <RenderImage users='' css='h-10 w-10 rounded-full' />
+                        <div id="user-pic" className='relative w-14 h-14 '>
+                            <RenderImage users='' css='rounded-full' />
                         </div>
                         <div id="broadcast-name">
                             <p className="text-xs md:text-lg text-slate-600">Broadcast Group</p>
