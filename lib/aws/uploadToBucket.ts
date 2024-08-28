@@ -13,8 +13,8 @@ export const uploadToBucket = async (fileName: string, body: Buffer) => {
         ContentType: "image/png"
     })
     try {
-        const response = await client.send(command);
-        console.log("New User Uploaded To AWS Successfully as ", fileName);
+        await client.send(command);
+        console.log("User Uploaded To AWS Successfully as ", fileName);
     } catch (error) {
         console.log("Error In Uploading To AWS", error)
     }

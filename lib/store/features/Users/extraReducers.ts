@@ -1,5 +1,5 @@
 import { ActionReducerMapBuilder } from "@reduxjs/toolkit";
-import { addUsers, alreadyLoggedIn, deleteUser, fetchAllUsers, fetchUnpaidUsersApi, loginUser, updateUser } from "./fetchUsersApi";
+import { addUsers, alreadyLoggedIn, deleteUser, fetchAllUsers, fetchUnpaidUsersApi, loginUser, updateUser, logoutUsersApi } from "./fetchUsersApi";
 import { IUserState } from "./userSlice";
 
 const extraUserReducers = (builder: ActionReducerMapBuilder<IUserState>) => {
@@ -105,6 +105,21 @@ const extraUserReducers = (builder: ActionReducerMapBuilder<IUserState>) => {
         state.error = null
     })
     builder.addCase(fetchUnpaidUsersApi.rejected, (state, action) => {
+        state.loading = false
+        state.error = String(action.payload) || "Failed To Fetch Unpaid User List"
+    })
+
+    // Logout User-----------------------------------------------------------------
+    builder.addCase(logoutUsersApi.fulfilled, (state, action) => {
+        state.loading = false
+        state.error = null
+        state.loggedInUser = null
+    })
+    builder.addCase(logoutUsersApi.pending, (state) => {
+        state.loading = true
+        state.error = null
+    })
+    builder.addCase(logoutUsersApi.rejected, (state, action) => {
         state.loading = false
         state.error = String(action.payload) || "Failed To Fetch Unpaid User List"
     })

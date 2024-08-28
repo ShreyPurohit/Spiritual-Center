@@ -43,7 +43,7 @@ const fetchAllUsers = createAsyncThunk(
     "users/fetchAllUsers",
     async ({ page, limit }: { page: number, limit: number }, { rejectWithValue }) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/users/fetchAllUsers?page=${page}&limit=${limit}`)
+            const response = await fetch(`http://localhost:3000/api/users/fetchAllUsers?page=${page}&limit=${limit}`, { cache: 'no-cache' })
             if (!response.ok) {
                 const { message } = await response.json()
                 throw new Error(message);
@@ -129,18 +129,14 @@ const fetchUnpaidUsersApi = createAsyncThunk(
 
 const logoutUsersApi = createAsyncThunk(
     'users/logout',
-    async (thunkApi, { rejectWithValue, getState }) => {
+    async (thunkApi, { rejectWithValue }) => {
         try {
-            const state = getState() as RootState
-            let { loggedInUser } = state.user
             const response = await fetch('http://localhost:3000/api/users/logout', {
                 method: 'POST',
             });
-
-            if (response.ok) {
-                loggedInUser = null
-            } else {
-                console.error('Failed to log out');
+            if (!response.ok) {
+                const { message } = await response.json()
+                throw new Error(message);
             }
         } catch (error: any) {
             return rejectWithValue(error.message)
