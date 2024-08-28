@@ -1,6 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import { ERole, IUser } from "@/lib/helpers/interfaces";
 
+const EmailRegex = process.env.EMAIL_REGEX as unknown as RegExp
+
 const userSchema: Schema<IUser> = new Schema<IUser>({
   username: {
     type: String,
@@ -36,7 +38,7 @@ const userSchema: Schema<IUser> = new Schema<IUser>({
     required: [true, "Email is required"],
     trim: true,
     unique: true,
-    match: [/^\S+@\S+\.\S+$/, "Email Must Be Valid"]
+    match: [EmailRegex, "Email Must Be Valid"]
   },
   photo: {
     type: String,
