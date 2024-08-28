@@ -105,7 +105,7 @@ const AdminUserFormPage: React.FC<AdminUserPageProps> = ({ user }) => {
                                 },
                             })}
                         />
-                        {errors.firstName && <span>{errors.firstName.message}</span>}
+                        {/* {errors.firstName && <span>{errors.firstName.message}</span>} */}
                     </div>
                     <div>
                         <label htmlFor="middleName">Middle Name</label>

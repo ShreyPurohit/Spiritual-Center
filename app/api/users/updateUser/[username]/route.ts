@@ -24,7 +24,7 @@ export async function PUT(req: Request, { params }: { params: { username: string
       if (image === "undefined") { return "" }
       return `${username}.${image.type.split('/')[1]}`
     }
-
+    const curentVersion = await UserModel.findOne({ username: params.username }).select('__v')
     await UserModel.findOneAndUpdate({ username: params.username },
       {
         username,
@@ -43,6 +43,7 @@ export async function PUT(req: Request, { params }: { params: { username: string
         email: body.email,
         initiationDate: body.initiationDate,
         photo: imgToDB(),
+        __v: curentVersion?.__v + 1
       },
       { new: true, runValidators: true }
     );

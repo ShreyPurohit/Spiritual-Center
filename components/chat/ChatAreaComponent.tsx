@@ -7,7 +7,6 @@ import { ArrowLeftCircle, SendHorizontalIcon } from "lucide-react"
 import moment from "moment"
 import dynamic from 'next/dynamic'
 const RenderImage = dynamic(() => import('../common/RenderImage'))
-import { generateMessageCSS } from '@/lib/helpers/helperFunctions'
 
 const ChatAreaComponent: React.FC<IChatAreaProps> = ({ headerData, messages, handleSubmit, inputValue, setInputValue, setShowChatArea }) => {
 
@@ -19,6 +18,31 @@ const ChatAreaComponent: React.FC<IChatAreaProps> = ({ headerData, messages, han
     }
 
     const loggedInUsername = loggedInUser.split("-").slice(2).join("-");
+
+    const generateMessageCSS = (username: string) => {
+        console.log(`Generating CSS for username: ${username}`);
+        console.log(`Logged in username: ${loggedInUsername}`);
+    
+        if (username === 'ADMIN') {
+            console.log('CSS for ADMIN');
+            return 'self-center px-6 py-3 rounded border border-black text-gray-200 gap-3 m-1';
+        }
+    
+        if (username === loggedInUsername) {
+            console.log('CSS for self message');
+            return 'self-end px-6 py-3 rounded-md bg-blue-300 max-w-xs lg:max-w-md text-gray-200 gap-3 m-1';
+        }
+    
+        if (username !== loggedInUsername) {
+            console.log(loggedInUsername);
+            console.log('CSS for other user message');
+            return 'self-start px-6 py-3 rounded-md bg-gray-300 max-w-xs lg:max-w-md text-gray-200 gap-3 m-1';
+        }
+        
+        // Default case (this should not be reached if all conditions are covered)
+        console.log('CSS for default case');
+        return '';
+    };
 
     const handleBackButton = () => {
         socket.emit('leaveChat', (error: any) => {
@@ -50,7 +74,7 @@ const ChatAreaComponent: React.FC<IChatAreaProps> = ({ headerData, messages, han
             <article id="chat-area" className="flex flex-col flex-1 border overflow-scroll scrollers">
                 {error && (<h2 id="error" className="text-center text-2xl text-amber-700 tracking-wide uppercase"> {error} </h2>)}
                 {messages && messages.length > 0 ? messages.map((message) => (
-                    <div key={message.createdAt} id='message-box' className={generateMessageCSS(message.username, loggedInUsername)}>
+                    <div key={message.createdAt} id='message-box' className={generateMessageCSS(message.username)}>
                         <div className="flex gap-3">
                             <p className="text-stone-800 text-sm md:text-base" style={{ overflowWrap: 'anywhere' }}>{message.text}</p>
                             <p className="text-sm text-stone-600 text-end place-self-end ">{moment(+(message.createdAt)).format('h:mm a')}</p>
