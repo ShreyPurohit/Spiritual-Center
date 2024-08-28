@@ -13,7 +13,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
     return NextResponse.json({ message: "Success", user, }, { status: 200 });
   } catch (error) {
-    console.error("Error in GET /api/users/checkUser", error);
-    return NextResponse.json({ message: "No User Logged In", error }, { status: 500 });
+    return NextResponse.json({ message: "No User Logged In", error }, { status: 404 });
   }
 }

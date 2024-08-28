@@ -31,7 +31,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const cookie = serialize("auth", cookieValue, {
       httpOnly: true,
       secure: true,
-      sameSite: true,
+      sameSite: 'strict',
       maxAge: 60 * 60 * 24,
       path: "/",
     });

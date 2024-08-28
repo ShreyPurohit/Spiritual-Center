@@ -6,8 +6,10 @@ import { decrypt } from '@/lib/auth/auth';
 import { cookies } from 'next/headers';
 
 const getCookieUserDate = () => {
-  const cookie = cookies().get('auth')?.value
-  const decryptedUser = decrypt(cookie!)
+  const cookie = cookies().get('auth')
+  if (!cookie) return
+  const cookieValue = cookie.value
+  const decryptedUser = decrypt(cookieValue)
   const { initiationDate } = JSON.parse(decryptedUser);
   return initiationDate
 }

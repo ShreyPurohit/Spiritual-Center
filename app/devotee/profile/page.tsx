@@ -18,7 +18,7 @@ const MyProfilePage = () => {
           <div className="relative w-full md:w-64 h-72">
             <RenderImage css="" users={userData.photo ? userData.photo : ""} />
           </div>
-          <div id="body" className="flex flex-col justify-between p-4 leading-normal"          >
+          <div id="body" className="flex flex-col justify-between p-4 leading-normal">
             <h3 className="mb-3 text-2xl font-bold tracking-tight text-stone-600 uppercase block">
               {userData.fullname.firstName} {" "} {userData.fullname.middleName}{" "} {userData.fullname.lastName}
             </h3>

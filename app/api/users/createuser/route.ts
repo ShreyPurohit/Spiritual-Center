@@ -9,7 +9,7 @@ export async function POST(req: Request, res: NextResponse) {
     const formData = await req.formData()
     const body: any = Object.fromEntries(formData)
     await connectMongoDb()
-    const image = body.imageUrl as any
+    const image = body.imageUrl
 
     const username = makeUserName(body.initiationDate, body.firstName, body.lastName);
     if (image !== 'undefined' && !(image.type.includes('/jpeg') || image.type.includes('/png'))) {

@@ -26,11 +26,7 @@ const LoginPage = () => {
   } = useForm<ILoginInputs>({ mode: "all" });
 
   const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "devotee") {
-      setShowOtp(true);
-    } else {
-      setShowOtp(false);
-    }
+    e.target.value === "devotee" ? setShowOtp(true) : setShowOtp(false)
   };
 
   const onSubmit: SubmitHandler<ILoginInputs> = async (data: ILoginInputs) => {
