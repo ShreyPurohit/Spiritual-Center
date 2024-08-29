@@ -44,14 +44,14 @@ const UserSearchSortButtons = ({ users, setUsers, allUsers }: { users: IUser[]; 
 
   const handleDynamicSearch = () => {
     users.forEach((user) => {
-      const fName = user.fullName.firstName
-      if (fName !== searchInput) {
-        return handleDBSearch()
+      const fName = user.fullName.firstName;
+      if (fName === searchInput) {
+        handleSearch({ searchInput, users, setUsers, allUsers });
       } else {
-        return handleSearch({ searchInput, users, setUsers, allUsers })
+        handleDBSearch();
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className="m-5 flex flex-col md:flex-row gap-5 md:justify-center items-center">
